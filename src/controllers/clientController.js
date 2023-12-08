@@ -1,65 +1,52 @@
 const clientesService = require('../services/clientService');
 
-const pegarClientes = async (req, res) => {
-    try{
-        const clientes = await clientesService.pegarClientes();
+const getClients = async (req, res) => {
+    try {
+        const clientes = await clientesService.getClients();
         res.status(200).send(clientes);
-    } catch(erro) { 
+    } catch (erro) {
         res.status(500).send(erro);
     }
 }
 
-const clientesId = async (req, res) => {
-    try{
-        const cliente = await clientesService.clientesId(req.params);
+const getClientById = async (req, res) => {
+    try {
+        const cliente = await clientesService.getClientById(req.params);
         res.status(200).send(cliente);
     } catch (erro) {
         res.status(500).send(erro);
     }
 }
 
-const postClientes = async (req, res) => {
-    try{
-        const cliente = await clientesService.postClientes(req.body);
+const persistClient = async (req, res) => {
+    try {
+        const cliente = await clientesService.persistClient(req.body);
         res.status(201).send(cliente);
-    }   catch (erro) {
+    } catch (erro) {
         res.status(500).send(erro);
     }
 }
 
-const patchCliente = async (req, res) => {
+const deleteClient = async (req, res) => {
     try {
-        const cliente = await clientesService.patchCliente(req.body);
-        res.status(201).send(cliente);
+        let msg = await clientesService.deleteClient(req.params);
+        res.status(200).send({ msg });
     } catch (err) {
         res.status(500).send(err);
     }
 }
 
-const deleteCliente = async (req, res) => {
-    try {
-        let deletado = await clientesService.deleteCliente(req.params);
-        let msg = deletado 
-            ? `Cliente ${req.params.id} deletado com sucesso` 
-            : `Não foi encontrado nenhum cliente com o id ${req.params.id} para ser deletado`;
-        res.status(200).send({ msg });
-    } catch (err) {
-    res.status(500).send(err);
-    }
-}
-
 const getClienteInfos = async (req, res) => {
-    try{
+    try {
         const cliente = await clientesService.getClienteInfos(req.params);
         res.status(200).send(cliente);
-    } catch(erro) { 
+    } catch (erro) {
         res.status(500).send(erro);
     }
 }
 
-module.exports.pegarClientes = pegarClientes;
-module.exports.clientesId = clientesId;
-module.exports.postClientes = postClientes;
-module.exports.patchCliente = patchCliente;
-module.exports.deleteCliente = deleteCliente;
+module.exports.getClients = getClients;
+module.exports.getClientById = getClientById;
+module.exports.persistClient = persistClient;
+module.exports.deleteClient = deleteClient;
 module.exports.getClienteInfos = getClienteInfos;
