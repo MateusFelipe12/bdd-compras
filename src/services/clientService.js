@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../config/postgre');
 
 // Consultar todos os clientes
 const getClients = async () => {

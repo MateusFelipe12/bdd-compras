@@ -1,5 +1,13 @@
 const e = require('express');
-const db = require('../config/db');
+const db = require('../config/postgre');
+const redis = require('../config/redis');
+
+const dataRedis = {
+    nomeAmigo: '',
+    nomeCliente: '',
+    compraCliente: '',
+    valorCompra: '',
+};
 
 const getBuy = async () => {
     let sql = 'SELECT * FROM buy';

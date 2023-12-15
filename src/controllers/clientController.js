@@ -36,17 +36,7 @@ const deleteClient = async (req, res) => {
     }
 }
 
-const getClienteInfos = async (req, res) => {
-    try {
-        const cliente = await clientesService.getClienteInfos(req.params);
-        res.status(200).send(cliente);
-    } catch (erro) {
-        res.status(500).send(erro);
-    }
-}
-
 module.exports.getClients = getClients;
 module.exports.getClientById = getClientById;
 module.exports.persistClient = persistClient;
 module.exports.deleteClient = deleteClient;
-module.exports.getClienteInfos = getClienteInfos;
