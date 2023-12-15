@@ -2,11 +2,13 @@ const e = require('express');
 const db = require('../config/postgre');
 const redis = require('../config/redis');
 
-const dataRedis = {
-    nomeAmigo: '',
-    nomeCliente: '',
-    compraCliente: '',
-    valorCompra: '',
+let dataRedis = {
+    friend_client: '',
+    id_client: '',
+    friend_client_name: '',
+    client_name: '',
+    buy: '',
+    valueBuy: '',
 };
 
 const getBuy = async () => {
@@ -20,9 +22,11 @@ const getBuyById = async (params) => {
     let buy = await db.query(sql, [params.codigo]);
     return buy.rows;
 }
+
 // Persistir compra (edita ou cria)
 const persistBuy = async (params) => {
-    let { produto, valor, data, id_client } = params;
+    let { produto, valor, data, id_client, friend_client} = params;
+    
     if (params.codigo) {
         let codigo = params.codigo;
         let fields = [];
@@ -38,6 +42,29 @@ const persistBuy = async (params) => {
             RETURNING *
         `;
         let insert = await db.query(sql, [produto, valor, data, id_client]);
+        
+        
+        let id = insert?.rows[0] ? insert?.rows[0].codigo : false;
+
+        if( id ) {
+            dataRedis.buy = produto;
+            dataRedis.id_client = id_client;
+            dataRedis.friend_client = friend_client;
+            dataRedis.valueBuy = valor;
+
+            const clientesController = require('./clientService');
+            friend_client = await clientesController.getClientById({id: friend_client})
+            client = await clientesController.getClientById({id: id_client})
+            dataRedis.friend_client_name = friend_client[0]?.nome;
+            dataRedis.client_name = client[0]?.nome;
+
+            try {
+                let res = await redis.setData(id, dataRedis)
+            } catch(err) {
+                console.log(err)
+            }
+        }    
+
         return insert.rows[0];
     }
 }

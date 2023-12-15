@@ -1,36 +1,42 @@
-const redis = require('redis');
+var redis = require('redis');
 
-// Crie um cliente Redis
-const client = redis.createClient({
-    host: 'localhost',
-    port: 6379,
-});
+const client = redis.createClient();
 
-// Manipuladores de eventos para lidar com erros, por exemplo
-client.on('error', (err) => {
-    console.error(`Erro de conexão com o Redis: ${err}`);
-});
+client.on('error', err => console.log('Redis Client Error', err));
 
-// Exemplo de autenticação (se o seu servidor Redis requer autenticação)
-// client.auth('sua_senha_redis', (err) => {
-//   if (err) throw err;
-//   console.log('Autenticado no Redis');
-// });
+client.connect();
 
-
-function setData(chave, dados) {
-    // Converta os dados para uma string JSON antes de armazenar
-    const dadosString = JSON.stringify(dados);
-
-    // Armazene os dados no Redis com a chave fornecida
-    client.set(chave, dadosString, (err, reply) => {
-        if (err) {
-            console.error(`Erro ao definir dados no Redis: ${err}`);
-        } else {
-            console.log(`Dados definidos no Redis. Resposta: ${reply}`);
+async function setData(chave, dados) {
+    try {
+        if (typeof dados === 'object') {
+            dados = JSON.stringify(dados);
         }
-    });
+        let data = await client.set(chave + '', dados);
+        return data;
+    } catch (err) {
+        console.log(err)
+    }
 }
 
-module.exports = { setData };
+
+async function getData(chave) {
+    try {
+        return await client.get(chave);
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+module.exports = { setData, getData};
+
+
+
+
+
+
+
+
+
+
+
 

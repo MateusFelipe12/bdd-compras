@@ -46,7 +46,6 @@ const persistPerson = async (params) => {
                 },
                 { returnDocument: 'after' }
             );
-            console.log("updated: " + updatedClient)
 
             return updatedClient;
         } else {
@@ -74,7 +73,6 @@ const deletePerson = async (params) => {
         if (params.id) {
             const peopleCollection = db.collection('people');
             const deletePerson = await peopleCollection.findOneAndDelete({ _id: new ObjectId(params.id) });
-            console.log(deletePerson)
             return deletePerson
                 ? "Registro deletado com sucesso"
                 : { message: "Nada encontrado com o id " + params.id };
