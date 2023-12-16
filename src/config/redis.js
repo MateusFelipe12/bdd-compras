@@ -27,7 +27,7 @@ async function getData(chave) {
     }
 }
 
-module.exports = { setData, getData};
+module.exports = { setData, getData, client};
 
 
 

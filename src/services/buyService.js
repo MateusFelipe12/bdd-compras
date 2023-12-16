@@ -34,6 +34,27 @@ const persistBuy = async (params) => {
         fields = fields.join(', ');
         const sql = `UPDATE buy SET ${fields} WHERE codigo = ${codigo} RETURNING *`;
         let update = await db.query(sql);
+        
+        let id = update?.rows[0] ? update?.rows[0].codigo : false;
+
+        if( id ) {
+            dataRedis.buy = produto;
+            dataRedis.id_client = id_client;
+            dataRedis.friend_client = friend_client;
+            dataRedis.valueBuy = valor;
+
+            const clientesController = require('./clientService');
+            friend_client = await clientesController.getClientById({id: friend_client})
+            client = await clientesController.getClientById({id: id_client})
+            dataRedis.friend_client_name = friend_client[0]?.nome;
+            dataRedis.client_name = client[0]?.nome;
+
+            try {
+                let res = await redis.setData(id, dataRedis)
+            } catch(err) {
+                console.log(err)
+            }
+        }    
         return update.rows[0];
     } else {
         let sql = `
