@@ -1,5 +1,6 @@
-# Descrição do Projeto
+# Integração de Bancos de Dados com Node.js + MongoDB + PostgreSQL + Redis
 
+## Descrição do Projeto
 Este projeto é o trabalho final da disciplina de banco de dados e visa a integração de três diferentes bancos de dados: MongoDB, PostgreSQL e Redis. A escolha da implementação foi feita em Node.js, devido à facilidade de conexão com esses três bancos de dados.
 
 ## Bases de Dados Utilizadas
