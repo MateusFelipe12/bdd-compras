@@ -1,12 +1,5 @@
--- Criação do banco de dados "compras"
-CREATE DATABASE compras;
-
--- Conectar ao banco de dados "compras"
-\c compras;
-
-
 -- Criação da tabela Cliente
-CREATE TABLE client (
+CREATE TABLE IF NOT EXISTS client (
     id SERIAL PRIMARY KEY,
     cpf VARCHAR(11) UNIQUE NOT NULL,
     nome VARCHAR(255) NOT NULL,
@@ -17,7 +10,7 @@ CREATE TABLE client (
 );
 
 -- Criação da tabela Compras
-CREATE TABLE buy (
+CREATE TABLE IF NOT EXISTS buy (
     codigo SERIAL PRIMARY KEY,
     produto VARCHAR(255) NOT NULL,
     valor DECIMAL(10, 2) NOT NULL,

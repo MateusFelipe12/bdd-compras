@@ -1,7 +1,11 @@
 var redis = require('redis');
 
-const client = redis.createClient();
-
+const client = redis.createClient({
+    // exemplo usando login e senha
+    // url: 'redis://alice:foobared@redis:6379'
+    url: process.env.REDIS_CONN
+});
+  
 client.on('error', err => console.log('Redis Client Error', err));
 
 client.connect();
